@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiny CRM</title>
+    <style>
+        body {
+            padding: 10px;
+            font-size: 18px;
+        }
+        ul > li {
+            margin: 15px;
+        }
+
+        ul > li > span {
+            font-size: 18px;
+            font-weight: bold;
+            font-family: sans-serif;
+        }
+
+        .ringing {
+            animation: blinker 1.5s linear infinite;
+            color: green;
+        }
+
+        .offhook {
+            color: chocolate;
+        }
+
+        .idle {
+            color: black;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blinker-one {
+            0% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blinker-two {
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="container">
+    <ul id="list">
+    </ul>
+</div>
+</body>
+<script type="text/javascript">
+    const list = document.getElementById('list');
+
+    const socket = io();
+    socket.on('call_state_change', (data) => {
+        let li = document.getElementById(data.customerId);
+        const innerHtml = `${data.date}: ${data.customerName} #${data.phone} <span class="${data.state.toLowerCase()}">${data.state}</span>`;
+        if (li) {
+            list.removeChild(li);
+        } else {
+            li = document.createElement('li');
+            li.id = data.customerId;
+        }
+        li.innerHTML = innerHtml;
+        list.prepend(li);
+    });
+</script>
+</html>

@@ -1,0 +1,8 @@
+POST http://localhost:3000/api/v1/call-states
+Content-Type: application/json
+
+{
+  "phone_number": "+10000000",
+  "state": "RINGING",
+  "timestamp": 1629521463195
+}
